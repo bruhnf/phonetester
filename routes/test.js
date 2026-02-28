@@ -4,7 +4,7 @@ const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
 const { sendCodeEmail } = require('../comms');
 const { generateCodes } = require('../voice');
-const isAuthenticated = require('./middleware/auth');
+const isAuthenticated = require('../middleware/auth');
 
 
 function normalizePhone(phone) {

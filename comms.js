@@ -34,7 +34,7 @@ async function sendCodeEmail(email, codes) {
     await transporter.sendMail({
       to: email,
       subject: 'Your Phone Tester Code Words',
-      text: `Your 5 code words: ${codes.join(', ')}`
+      text: `Your 5 code words: ${codes.join(', ')} Please call this number. ${process.env.TWILIO_PHONE_NUMBER}`
     });
     console.log(`Code email sent to: ${email}`);
   } catch (err) {
