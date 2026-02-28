@@ -39,7 +39,7 @@ router.post('/signup', [
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log('Validation errors:', errors.array());
-    return res.redirect(`/?open=signup?error=${encodeURIComponent(errors.array().map(e => e.msg).join(', '))}`);
+    return res.redirect(`/signup?error=${encodeURIComponent(errors.array().map(e => e.msg).join(', '))}`);
   }
   let { first_name, last_name, username, email, phone, password, optin } = req.body;
   try {
@@ -78,7 +78,7 @@ router.get('/verify-email', async (req, res) => {
     const user = await User.findOne({ email, emailToken: token });
     if (!user) {
       console.log(`Invalid verification token for email: ${email}`);
-      return res.redirect('/?open=signup?error=invalid-token');
+      return res.redirect('/signup?error=invalid-token');
     }
     user.verified = true;
     user.emailToken = null;
@@ -88,7 +88,7 @@ router.get('/verify-email', async (req, res) => {
     res.redirect('/?verify=success');
   } catch (err) {
     console.error('Verification error:', err);
-    res.redirect('/?open=signup?error=verify-failed');
+    res.redirect('/signup?error=verify-failed');
   }
 });
 
@@ -99,14 +99,14 @@ router.post('/login', [
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log('Login validation errors:', errors.array());
-    return res.redirect(`/?open=signup?error=${encodeURIComponent(errors.array().map(e => e.msg).join(', '))}`);
+    return res.redirect(`/signup?error=${encodeURIComponent(errors.array().map(e => e.msg).join(', '))}`);
   }
   const { identifier, password } = req.body;
   try {
     const user = await User.findOne({ $or: [{ email: identifier }, { username: identifier }] });
     if (!user) {
       console.log(`Login attempt with unknown identifier: ${identifier}`);
-      return res.redirect('/?open=signup?error=invalid-credentials');
+      return res.redirect('/signup?error=invalid-credentials');
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -115,14 +115,14 @@ router.post('/login', [
     }
     if (!user.verified) {
       console.log(`Unverified login attempt: ${identifier}`);
-      return res.redirect('/?open=signup?error=not-verified');
+      return res.redirect('/signup?error=not-verified');
     }
     req.session.userId = user._id.toString();
     console.log(`User logged in: ${identifier}`);
     res.redirect('/?login=success');
   } catch (err) {
     console.error('Login error:', err);
-    res.redirect('/?open=signup?error=login-failed');
+    res.redirect('/signup?error=login-failed');
   }
 });
 
