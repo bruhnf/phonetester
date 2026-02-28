@@ -299,6 +299,32 @@
     .fr{grid-template-columns:1fr}
     .mbox{padding:32px 22px}
   }
+  
+    /* User profile chip — add to existing <style> block */
+  .user-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--cyan);
+    color: #000;
+    font-family: var(--fm);
+    font-size: .8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .user-name {
+    color: var(--cyan);
+    font-family: var(--fm);
+    font-size: .8rem;
+  }
+  
   </style>
 </head>
 <body>
@@ -321,15 +347,15 @@
       <form class="mf on" id="mf-su" action="/signup" method="post">
         <div class="fg"><label class="fl">// Username</label><input class="fi" type="text" name="username" placeholder="your_handle" required /></div>
         <div class="fr">
-          <div class="fg"><label class="fl">// Email</label><input class="fi" type="email" name="email" placeholder="you@domain.com" required /></div>
+          <div class="fg"><label class="fl">// Email</label><input class="fi" type="email" name="identifier" placeholder="Email or Username" required /></div>
           <div class="fg"><label class="fl">// Phone</label><input class="fi" type="tel" name="phone" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required /></div>
         </div>
         <div class="fg"><label class="fl">// Password</label><input class="fi" type="password" name="password" placeholder="min. 6 characters" minlength="6" required /></div>
         <button type="submit" class="btn-c" style="width:100%;justify-content:center;clip-path:none;border-radius:2px;margin-top:4px">Initialize Account →</button>
-        <div class="mnote">Verification link sent to your email. You agree to our <a href="/terms.html">Terms</a> &amp; <a href="/privacy.html">Privacy Policy</a>.</div>
+        <div class="mnote">Verification link sent to your email. You agree to our <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a>.</div>
       </form>
       <form class="mf" id="mf-li" action="/login" method="post">
-        <div class="fg"><label class="fl">// Email or Username</label><input class="fi" type="text" name="email" placeholder="you@domain.com" required /></div>
+        <div class="fg"><label class="fl">// Email or Username</label><input class="fi" type="text" name="identifier" placeholder="you@domain.com" required /></div>
         <div class="fg"><label class="fl">// Password</label><input class="fi" type="password" name="password" placeholder="••••••••" required /></div>
         <button type="submit" class="btn-c" style="width:100%;justify-content:center;clip-path:none;border-radius:2px;margin-top:4px">Authenticate →</button>
       </form>
@@ -386,6 +412,39 @@
         </div>
       </div>
     </nav>
+
+<script>
+(async function() {
+  try {
+    const res  = await fetch('/me');
+    const data = await res.json();
+    const cta  = document.querySelector('.ncta'); // the Login/Signup nav button
+
+    if (data.loggedIn && cta) {
+      // Replace the login button with a profile chip
+      cta.outerHTML = `
+        <div class="user-chip">
+          <div class="user-avatar">
+            ${data.username.charAt(0).toUpperCase()}
+          </div>
+          <span class="user-name">${data.username}</span>
+          <a href="/test" class="btn-c" style="margin-left:12px;font-size:.75rem;padding:6px 14px">
+            Dashboard →
+          </a>
+          <a href="#" id="logout-btn" style="color:var(--muted);font-size:.75rem;margin-left:8px">
+            [ logout ]
+          </a>
+        </div>`;
+
+      document.getElementById('logout-btn').addEventListener('click', async (e) => {
+        e.preventDefault();
+        await fetch('/logout', { method: 'POST' });
+        location.reload();
+      });
+    }
+  } catch(e) { /* fail silently */ }
+})();
+</script>
 
     <!-- HERO -->
     <section id="hero">

@@ -4,11 +4,8 @@ const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
 const { sendCodeEmail } = require('../comms');
 const { generateCodes } = require('../voice');
+const isAuthenticated = require('./middleware/auth');
 
-function isAuthenticated(req, res, next) {
-  if (req.session.userId) return next();
-  res.redirect('/signup?error=login-required');
-}
 
 function normalizePhone(phone) {
   // Remove non-digits
@@ -74,13 +71,13 @@ router.get('/status', isAuthenticated, async (req, res) => {
       console.log(`Unauthorized status access attempt for email: ${email}`);
       return res.status(403).send('Unauthorized');
     }
-    if (user.status === 'success') {
-      res.send('<h1>Test Successful!</h1>');
-    } else if (user.status === 'failed') {
-      res.send(`<h1>Test Failed</h1><p>Call support: ${process.env.SUPPORT_NUMBER}</p>`);
-    } else {
-      res.send('<h1>Waiting for Verification</h1><script>setTimeout(() => location.reload(), 5000);</script>');
-    }
+       if (user.status === 'success') {
+         return res.redirect('/test?status=success');
+       } else if (user.status === 'failed') {
+         return res.redirect('/test?status=failed');
+       } else {
+         return res.redirect('/test?status=waiting&email=' + encodeURIComponent(email));
+       }
   } catch (err) {
     console.error('Status check error:', err);
     res.status(500).send('Server error checking status');

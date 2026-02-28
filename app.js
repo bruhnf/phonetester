@@ -6,6 +6,7 @@ const path = require('path');
 const authRouter = require('./routes/auth');
 const testRouter = require('./routes/test');
 const { handleCall } = require('./voice');
+const isAuthenticated = require('./middleware/auth');
 require('dotenv').config();
 
 const app = express();
@@ -21,11 +22,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 mongoose.connect(process.env.MONGO_URI || 'mongodb://mongo:27017/phonetester')
   .then(() => console.log('DB connected'))
   .catch(err => console.error('DB connection error:', err));
-
-function isAuthenticated(req, res, next) {
-  if (req.session.userId) return next();
-  res.redirect('/?open=login');  // Redirect to home with login modal param
-}
 
 // Public routes (landing, signup, privacy, terms, verify-email from auth)
 app.use('/', authRouter);
@@ -48,8 +44,20 @@ app.get('/terms', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'terms.html'));
 });
 
-// Future protected pages example:
-// app.get('/future-page', isAuthenticated, (req, res) => res.sendFile(path.join(__dirname, 'public', 'future.html')));
+app.get('/me', (req, res) => {
+  if (!req.session.userId) return res.json({ loggedIn: false });
+  const User = require('./models/user');
+  User.findById(req.session.userId, 'username firstName')
+    .then(user => {
+      if (!user) return res.json({ loggedIn: false });
+      res.json({ loggedIn: true, username: user.username, firstName: user.firstName });
+    })
+    .catch(() => res.json({ loggedIn: false }));
+});
+
+app.post('/logout', (req, res) => {
+  req.session.destroy(() => res.redirect('/'));
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server on port ${PORT}`));
