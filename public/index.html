@@ -2478,59 +2478,81 @@
   <div id="cr"></div>
   <canvas id="cv"></canvas>
 
-  <!-- AUTH MODAL -->
-  <div class="mbg" id="modal">
-    <div class="mbox">
-      <button class="mx" id="mc">✕</button>
-      <div class="mhl"></div>
-      <div class="mhd">Access Portal</div>
-      <div class="msub">// BRUHN FREEMAN — SECURE AUTHENTICATION</div>
-      <div class="mtabs">
-        <button class="mta on" data-t="su">[ Create Account ]</button>
-        <button class="mta" data-t="li">[ Sign In ]</button>
-      </div>
-      <form class="mf on" id="mf-su" action="/signup" method="post">
-        <div class="fr">
-          <div class="fg">
-            <label class="fl">// First Name</label>
-            <input class="fi" type="text" name="first_name" placeholder="Jane" required />
-          </div>
-          <div class="fg">
-            <label class="fl">// Last Name</label>
-            <input class="fi" type="text" name="last_name" placeholder="Smith" required />
-          </div>
-        </div>
-        <div class="fg">
-          <label class="fl">// Username</label>
-          <input class="fi" type="text" name="username" placeholder="your_handle" required />
-        </div>
-        <div class="fr">
-          <div class="fg">
-            <label class="fl">// Email</label>
-            <input class="fi" type="email" name="email" placeholder="you@domain.com" required />
-          </div>
-          <div class="fg">
-            <label class="fl">// Phone</label>
-            <input class="fi" type="tel" name="phone" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              required />
-          </div>
-        </div>
-        <div class="fg">
-          <label class="fl">// Password</label>
-          <input class="fi" type="password" name="password" placeholder="min. 6 characters" minlength="6" required />
-        </div>
-        <button type="submit" class="btn-c"
-          style="width:100%;justify-content:center;clip-path:none;border-radius:2px;margin-top:4px">
+<!-- AUTH MODAL -->
+<div class="mbg" id="modal">
+  <div class="mbox">
+    <button class="mx" id="mc">✕</button>
+    <div class="mhl"></div>
+    <div class="mhd">Access Portal</div>
+    <div class="msub">// BRUHN FREEMAN — SECURE AUTHENTICATION</div>
 
-          Initialize Account →
-        </button>
-        <div class="mnote">
-          Verification link sent to your email. You agree to our
-          <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a>.
-        </div>
-      </form>
+    <div class="mtabs">
+      <button class="mta on" data-t="su">[ Create Account ]</button>
+      <button class="mta" data-t="li">[ Sign In ]</button>
     </div>
+
+    <!-- SIGNUP FORM -->
+    <form class="mf on" id="mf-su" action="/signup" method="post">
+      <div class="fr">
+        <div class="fg">
+          <label class="fl">// First Name</label>
+          <input class="fi" type="text" name="first_name" placeholder="Jane" required />
+        </div>
+        <div class="fg">
+          <label class="fl">// Last Name</label>
+          <input class="fi" type="text" name="last_name" placeholder="Smith" required />
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">// Username</label>
+        <input class="fi" type="text" name="username" placeholder="your_handle" required />
+      </div>
+      <div class="fr">
+        <div class="fg">
+          <label class="fl">// Email</label>
+          <input class="fi" type="email" name="email" placeholder="you@domain.com" required />
+        </div>
+        <div class="fg">
+          <label class="fl">// Phone</label>
+          <input class="fi" type="tel" name="phone" placeholder="123-456-7890"
+                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required />
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">// Password</label>
+        <input class="fi" type="password" name="password"
+               placeholder="min. 6 characters" minlength="6" required />
+      </div>
+      <button type="submit" class="btn-c"
+              style="width:100%;justify-content:center;clip-path:none;border-radius:2px;margin-top:4px">
+        Initialize Account →
+      </button>
+      <div class="mnote">
+        Verification link sent to your email. You agree to our
+        <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a>.
+      </div>
+    </form>
+
+    <!-- LOGIN FORM -->
+    <form class="mf" id="mf-li" action="/login" method="post">
+      <div class="fg">
+        <label class="fl">// Email or Username</label>
+        <input class="fi" type="text" name="identifier"
+               placeholder="you@domain.com or your_handle" required />
+      </div>
+      <div class="fg">
+        <label class="fl">// Password</label>
+        <input class="fi" type="password" name="password"
+               placeholder="••••••••" required />
+      </div>
+      <button type="submit" class="btn-c"
+              style="width:100%;justify-content:center;clip-path:none;border-radius:2px;margin-top:4px">
+        Authenticate →
+      </button>
+    </form>
+
   </div>
+</div>
 <script>
 const urlParams = new URLSearchParams(window.location.search);
 
