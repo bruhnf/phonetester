@@ -24,10 +24,6 @@ function normalizePhone(phone) {
   }
 }
 
-router.get('/signup', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public', 'signup.html'));
-});
-
 router.post('/signup', [
   body('first_name').trim().notEmpty().withMessage('First name required'),
   body('last_name').trim().notEmpty().withMessage('Last name required'),
