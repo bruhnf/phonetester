@@ -2478,81 +2478,92 @@
   <div id="cr"></div>
   <canvas id="cv"></canvas>
 
-<!-- AUTH MODAL -->
-<div class="mbg" id="modal">
-  <div class="mbox">
-    <button class="mx" id="mc">✕</button>
-    <div class="mhl"></div>
-    <div class="mhd">Access Portal</div>
-    <div class="msub">// BRUHN FREEMAN — SECURE AUTHENTICATION</div>
+  <!-- AUTH MODAL -->
+  <div class="mbg" id="modal">
+    <div class="mbox">
+      <button class="mx" id="mc">✕</button>
+      <div class="mhl"></div>
+      <div class="mhd">Access Portal</div>
+      <div class="msub">// BRUHN FREEMAN — SECURE AUTHENTICATION</div>
 
-    <div class="mtabs">
-      <button class="mta on" data-t="su">[ Create Account ]</button>
-      <button class="mta" data-t="li">[ Sign In ]</button>
+      <div class="mtabs">
+        <button class="mta on" data-t="su">[ Create Account ]</button>
+        <button class="mta" data-t="li">[ Sign In ]</button>
+      </div>
+
+      <!-- SIGNUP FORM -->
+      <form class="mf on" id="mf-su" action="/signup" method="post">
+        <div class="fr">
+          <div class="fg">
+            <label class="fl">// First Name</label>
+            <input class="fi" type="text" name="first_name" placeholder="Jane" required />
+          </div>
+          <div class="fg">
+            <label class="fl">// Last Name</label>
+            <input class="fi" type="text" name="last_name" placeholder="Smith" required />
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">// Username</label>
+          <input class="fi" type="text" name="username" placeholder="your_handle" required />
+        </div>
+        <div class="fr">
+          <div class="fg">
+            <label class="fl">// Email</label>
+            <input class="fi" type="email" name="email" placeholder="you@domain.com" required />
+          </div>
+          <div class="fg">
+            <label class="fl">// Phone</label>
+            <input class="fi" type="tel" name="phone" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              required />
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">// Password</label>
+          <input class="fi" type="password" name="password" placeholder="min. 6 characters" minlength="6" required />
+        </div>
+        <!-- SMS OPT-IN CHECKBOX -->
+        <div class="fg" style="margin-top:10px">
+          <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer">
+            <input type="checkbox" name="optin" value="yes" id="optin"
+              style="margin-top:3px;accent-color:var(--cyan);width:15px;height:15px;flex-shrink:0;" />
+            <span
+              style="font-family:var(--fm);font-size:.68rem;color:rgba(255,255,255,.65);line-height:1.6;letter-spacing:.03em;">
+              By signing up for services at bruhnfreeman.com, I agree to periodically receive
+              text messages for account maintenance, security and other purposes.
+            </span>
+          </label>
+        </div>
+        <button type="submit" class="btn-c"
+          style="width:100%;justify-content:center;clip-path:none;border-radius:2px;margin-top:10px">
+          Initialize Account →
+        </button>
+        <div class="mnote" style="margin-top:10px;font-size:.66rem;line-height:1.7;">
+          Verification link will be sent to your email address. By creating an account you agree to our
+          <a href="/terms" style="color:var(--cyan);text-decoration:none;">Terms of Service</a>
+          &amp;
+          <a href="/privacy" style="color:var(--cyan);text-decoration:none;">Privacy Policy</a>.
+        </div>
+      </form>
+
+      <!-- LOGIN FORM -->
+      <form class="mf" id="mf-li" action="/login" method="post">
+        <div class="fg">
+          <label class="fl">// Email or Username</label>
+          <input class="fi" type="text" name="identifier" placeholder="you@domain.com or your_handle" required />
+        </div>
+        <div class="fg">
+          <label class="fl">// Password</label>
+          <input class="fi" type="password" name="password" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn-c"
+          style="width:100%;justify-content:center;clip-path:none;border-radius:2px;margin-top:4px">
+          Authenticate →
+        </button>
+      </form>
+
     </div>
-
-    <!-- SIGNUP FORM -->
-    <form class="mf on" id="mf-su" action="/signup" method="post">
-      <div class="fr">
-        <div class="fg">
-          <label class="fl">// First Name</label>
-          <input class="fi" type="text" name="first_name" placeholder="Jane" required />
-        </div>
-        <div class="fg">
-          <label class="fl">// Last Name</label>
-          <input class="fi" type="text" name="last_name" placeholder="Smith" required />
-        </div>
-      </div>
-      <div class="fg">
-        <label class="fl">// Username</label>
-        <input class="fi" type="text" name="username" placeholder="your_handle" required />
-      </div>
-      <div class="fr">
-        <div class="fg">
-          <label class="fl">// Email</label>
-          <input class="fi" type="email" name="email" placeholder="you@domain.com" required />
-        </div>
-        <div class="fg">
-          <label class="fl">// Phone</label>
-          <input class="fi" type="tel" name="phone" placeholder="123-456-7890"
-                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required />
-        </div>
-      </div>
-      <div class="fg">
-        <label class="fl">// Password</label>
-        <input class="fi" type="password" name="password"
-               placeholder="min. 6 characters" minlength="6" required />
-      </div>
-      <button type="submit" class="btn-c"
-              style="width:100%;justify-content:center;clip-path:none;border-radius:2px;margin-top:4px">
-        Initialize Account →
-      </button>
-      <div class="mnote">
-        Verification link sent to your email. You agree to our
-        <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a>.
-      </div>
-    </form>
-
-    <!-- LOGIN FORM -->
-    <form class="mf" id="mf-li" action="/login" method="post">
-      <div class="fg">
-        <label class="fl">// Email or Username</label>
-        <input class="fi" type="text" name="identifier"
-               placeholder="you@domain.com or your_handle" required />
-      </div>
-      <div class="fg">
-        <label class="fl">// Password</label>
-        <input class="fi" type="password" name="password"
-               placeholder="••••••••" required />
-      </div>
-      <button type="submit" class="btn-c"
-              style="width:100%;justify-content:center;clip-path:none;border-radius:2px;margin-top:4px">
-        Authenticate →
-      </button>
-    </form>
-
   </div>
-</div>
   <div class="toast" id="toast"></div>
 
   <div class="page">
@@ -2817,7 +2828,8 @@
             <h2 class="stitle">Hear Yourself <em>Clearly</em></h2>
             <p class="sdesc" style="max-width:100%">You know how everyone else sounds on a call. But do you know how
               <em>you</em> sound? Phone Tester puts your device, microphone, and network on trial — from the listener's
-              perspective.</p>
+              perspective.
+            </p>
             <ul class="ptfl">
               <li>
                 <div class="fck">✓</div><span>Register and verify your account in under 2 minutes via email link</span>
@@ -3164,23 +3176,23 @@
     // ── Contact form ────────────────────────────────────────────────
     document.getElementById('cf').addEventListener('submit', e => { e.preventDefault(); const t = document.getElementById('toast'); t.textContent = "Message sent. We'll respond within 24 hours."; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 4500); e.target.reset(); });
 
-        // ── Auth redirect handling (must run after openM is defined) ────
+    // ── Auth redirect handling (must run after openM is defined) ────
     (function () {
       const urlParams = new URLSearchParams(window.location.search);
 
       const errorMessages = {
         'invalid-credentials': 'Incorrect email/username or password.',
-        'not-verified':        'Please verify your email before logging in.',
-        'user-exists':         'That email or username is already registered.',
-        'signup-failed':       'Signup failed. Please try again.',
-        'login-failed':        'Login failed. Please try again.',
-        'invalid-token':       'Verification link is invalid or expired.',
-        'verify-failed':       'Verification failed. Please try again.'
+        'not-verified': 'Please verify your email before logging in.',
+        'user-exists': 'That email or username is already registered.',
+        'signup-failed': 'Signup failed. Please try again.',
+        'login-failed': 'Login failed. Please try again.',
+        'invalid-token': 'Verification link is invalid or expired.',
+        'verify-failed': 'Verification failed. Please try again.'
       };
 
       // Open the correct modal tab
       if (urlParams.has('open')) {
-        const tab   = urlParams.get('open');
+        const tab = urlParams.get('open');
         const error = urlParams.get('error');
 
         // For user-exists, switch to Sign In tab so they can log in immediately
@@ -3196,14 +3208,14 @@
       // Inject error banner if an error code was passed
       if (urlParams.has('error')) {
         const code = urlParams.get('error');
-        const msg  = errorMessages[code] || 'An error occurred. Please try again.';
+        const msg = errorMessages[code] || 'An error occurred. Please try again.';
         const mbox = document.querySelector('.mbox');
 
         if (mbox) {
           const isUserExists = (code === 'user-exists');
           const color = isUserExists ? '#fbbf24' : '#f87171';
-          const bg    = isUserExists ? 'rgba(251,191,36,0.10)' : 'rgba(248,113,113,0.12)';
-          const bdr   = isUserExists ? 'rgba(251,191,36,0.35)' : 'rgba(248,113,113,0.4)';
+          const bg = isUserExists ? 'rgba(251,191,36,0.10)' : 'rgba(248,113,113,0.12)';
+          const bdr = isUserExists ? 'rgba(251,191,36,0.35)' : 'rgba(248,113,113,0.4)';
 
           const banner = document.createElement('div');
           banner.style.cssText = `

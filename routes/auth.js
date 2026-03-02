@@ -56,7 +56,7 @@ router.post('/signup', [
       phone,
       password: hashedPassword,
       emailToken: token,
-      optInSMS: !!optin
+      optInSMS: optin === 'yes'
     });
     await user.save();
     await sendVerificationEmail(email, token);
