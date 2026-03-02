@@ -2553,57 +2553,6 @@
 
   </div>
 </div>
-<script>
-const urlParams = new URLSearchParams(window.location.search);
-
-// Map server error codes to human-readable messages
-const errorMessages = {
-  'invalid-credentials': 'Incorrect email/username or password.',
-  'not-verified':        'Please verify your email before logging in.',
-  'user-exists':         'That email or username is already registered.',
-  'signup-failed':       'Signup failed. Please try again.',
-  'login-failed':        'Login failed. Please try again.',
-  'invalid-token':       'Verification link is invalid or expired.',
-  'verify-failed':       'Verification failed. Please try again.'
-};
-
-if (urlParams.has('open')) {
-  const tab = urlParams.get('open');
-  if (tab === 'signup') openM('su');
-  else if (tab === 'login') openM('li');
-}
-
-// Show error message inside the modal if one was passed
-if (urlParams.has('error')) {
-  const code = urlParams.get('error');
-  const msg  = errorMessages[code] || 'An error occurred. Please try again.';
-
-  // Create an error banner and inject it into the modal box
-  const mbox = document.querySelector('.mbox');
-  if (mbox) {
-    const banner = document.createElement('div');
-    banner.style.cssText = `
-      background: rgba(248,113,113,0.12);
-      border: 1px solid rgba(248,113,113,0.4);
-      color: #f87171;
-      font-family: var(--fm);
-      font-size: .72rem;
-      letter-spacing: .08em;
-      padding: 10px 14px;
-      margin-bottom: 14px;
-    `;
-    banner.textContent = '// ERROR: ' + msg;
-    // Insert after the tab buttons
-    const tabs = mbox.querySelector('.mtabs');
-    if (tabs) tabs.insertAdjacentElement('afterend', banner);
-    else mbox.prepend(banner);
-  }
-}
-
-history.replaceState(null, '', window.location.pathname);
-</script>
-
-
   <div class="toast" id="toast"></div>
 
   <div class="page">
@@ -3214,6 +3163,77 @@ history.replaceState(null, '', window.location.pathname);
 
     // ── Contact form ────────────────────────────────────────────────
     document.getElementById('cf').addEventListener('submit', e => { e.preventDefault(); const t = document.getElementById('toast'); t.textContent = "Message sent. We'll respond within 24 hours."; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 4500); e.target.reset(); });
+
+        // ── Auth redirect handling (must run after openM is defined) ────
+    (function () {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      const errorMessages = {
+        'invalid-credentials': 'Incorrect email/username or password.',
+        'not-verified':        'Please verify your email before logging in.',
+        'user-exists':         'That email or username is already registered.',
+        'signup-failed':       'Signup failed. Please try again.',
+        'login-failed':        'Login failed. Please try again.',
+        'invalid-token':       'Verification link is invalid or expired.',
+        'verify-failed':       'Verification failed. Please try again.'
+      };
+
+      // Open the correct modal tab
+      if (urlParams.has('open')) {
+        const tab   = urlParams.get('open');
+        const error = urlParams.get('error');
+
+        // For user-exists, switch to Sign In tab so they can log in immediately
+        if (tab === 'signup' && error === 'user-exists') {
+          openM('li');
+        } else if (tab === 'signup') {
+          openM('su');
+        } else if (tab === 'login') {
+          openM('li');
+        }
+      }
+
+      // Inject error banner if an error code was passed
+      if (urlParams.has('error')) {
+        const code = urlParams.get('error');
+        const msg  = errorMessages[code] || 'An error occurred. Please try again.';
+        const mbox = document.querySelector('.mbox');
+
+        if (mbox) {
+          const isUserExists = (code === 'user-exists');
+          const color = isUserExists ? '#fbbf24' : '#f87171';
+          const bg    = isUserExists ? 'rgba(251,191,36,0.10)' : 'rgba(248,113,113,0.12)';
+          const bdr   = isUserExists ? 'rgba(251,191,36,0.35)' : 'rgba(248,113,113,0.4)';
+
+          const banner = document.createElement('div');
+          banner.style.cssText = `
+            background: ${bg};
+            border: 1px solid ${bdr};
+            color: ${color};
+            font-family: var(--fm);
+            font-size: .72rem;
+            letter-spacing: .08em;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            line-height: 1.6;
+          `;
+
+          if (isUserExists) {
+            banner.innerHTML = '// ACCOUNT EXISTS: ' + msg +
+              '<br/><span style="opacity:.75">Enter your credentials below to sign in.</span>';
+          } else {
+            banner.textContent = '// ERROR: ' + msg;
+          }
+
+          const tabs = mbox.querySelector('.mtabs');
+          if (tabs) tabs.insertAdjacentElement('afterend', banner);
+          else mbox.prepend(banner);
+        }
+      }
+
+      // Clean the URL so refreshing doesn't re-trigger the modal
+      history.replaceState(null, '', window.location.pathname);
+    })();
   </script>
   <script>
     (async function () {

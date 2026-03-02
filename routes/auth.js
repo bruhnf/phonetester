@@ -61,7 +61,7 @@ router.post('/signup', [
     await user.save();
     await sendVerificationEmail(email, token);
     console.log(`User signed up and verification email sent: ${email}`);
-    res.redirect('/?signup=success');
+    res.redirect(`/verify-pending.html?email=${encodeURIComponent(email)}`);
   } catch (err) {
     console.error('Signup error:', err);
     res.redirect('/?open=signup&error=signup-failed');
@@ -119,6 +119,32 @@ router.post('/login', [
   } catch (err) {
     console.error('Login error:', err);
     res.redirect('/?open=login&error=login-failed');
+  }
+});
+
+router.post('/resend-verification', async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.json({ ok: false, message: 'Email address required.' });
+  }
+  try {
+    const user = await User.findOne({ email });
+
+    // Always respond OK to avoid user enumeration (don't reveal if email exists)
+    if (!user || user.verified) {
+      return res.json({ ok: true });
+    }
+
+    // Issue a fresh token and resend
+    const token = crypto.randomUUID();
+    user.emailToken = token;
+    await user.save();
+    await sendVerificationEmail(email, token);
+    console.log(`Verification email resent to: ${email}`);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Resend verification error:', err);
+    res.json({ ok: false, message: 'Server error. Please try again.' });
   }
 });
 
